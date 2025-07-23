@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2507.15728" target='_blank'>
-    <img src="https://img.shields.io/badge/arXiv-2504.12369-blue?">
+    <img src="https://img.shields.io/badge/arXiv-2507.15728-blue?">
   </a>
   <a href="https://vicky0522.github.io/tokensgen-webpage/" target='_blank'>
     <img src="https://img.shields.io/badge/Project-&#x1F680-blue">
