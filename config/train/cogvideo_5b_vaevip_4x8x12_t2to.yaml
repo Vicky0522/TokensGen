@@ -1,0 +1,159 @@
+name_prefix: cogvido_5b_vaevip_4x8x12_t2to
+output_dir: "./outputs"
+logging_dir: "logs"
+cache_dir:
+tracker_name:
+
+# Pretrained diffusers model path.
+pretrained_model_name_or_path: "weights/CogVideoX-5b"
+revision: 
+variant:
+transformer_trainable_modules: ["all"] 
+
+# Pretrained transformer path
+pretrained_transformer_name_or_path:
+
+# video ipadapter params
+use_vip: true
+use_image_proj: true
+pretrained_resampler_name_or_path: 
+  "weights/TokensGen-To2V"
+video_ipadapter_params:
+  is_trainable: false
+  image_encoder_path: "../models/dinov2-giant" 
+  scale: 1.0
+  length: 480
+  use_vae_as_encoder: true
+  func_type: "1"
+  video_ipadapter_start_frame_idx: 1000
+  ignore_mismatched_sizes: true
+  low_cpu_mem_usage: false
+  mean_path: 
+    "weights/TokensGen-To2V/mean.pt"
+  std_path: 
+    "weights/TokensGen-To2V/std.pt"
+  pca_path: 
+    "weights/TokensGen-To2V/pca.pt"
+  resampler_params:
+    dim: 3072
+    depth: 4
+    dim_head: 64
+    heads: 16
+    num_height_queries: 8 
+    num_width_queries: 12
+    num_temporal_queries: 4
+    embedding_dim: 3072
+    output_dim: 3072
+    ff_mult: 4
+    max_height_seq_len: 30
+    max_width_seq_len: 45
+    max_temporal_seq_len: 13
+
+
+# lora params
+use_lora: false
+lora_params:
+  is_trainable: false
+  rank: 128
+  lora_alpha: 64
+  target_modules: ["to_k", "to_q", "to_v", "to_out.0"]
+
+####################################
+########## training params #########
+report_to: "tensorboard"
+push_to_hub: true
+hub_token: ~
+seed: 42
+mixed_precision: "bf16"
+gradient_accumulation_steps: 5
+gradient_checkpointing: true
+allow_tf32: true
+learning_rate: 3e-4
+scale_lr: false
+max_train_steps: 
+num_train_epochs: 30000
+#lr_scheduler: "cosine_with_restarts"
+lr_scheduler: "constant"
+lr_warmup_steps: 200
+lr_num_cycles: 1
+lr_power: 1.0
+adam_beta1: 0.9
+adam_beta2: 0.95
+prodigy_beta3:
+prodigy_decouple: false
+adam_weight_decay: 1e-4
+adam_epsilon: 1e-08
+prodigy_use_bias_correction: false
+prodigy_safeguard_warmup: false
+
+optimizer: "adamw"
+use_8bit_adam: true
+max_grad_norm: 1.0
+diff_timesteps_ratio: 0.0
+per_gpu_batch_size: 3
+checkpoints_total_limit: 2
+checkpointing_steps: 100
+resume_from_checkpoint: 
+validation_steps: 100
+enable_slicing: true
+enable_tiling: true
+use_absolute_positional_embeddings: false
+use_explicit_uniform_sampling: true
+norm_with_channels: false
+offset_noise_strength: 0.0
+use_offset_noise: false
+add_gaussian_noise: "gaussian"
+norm: "pca" 
+noise_scheduler:
+use_per_timestep_weight: true
+
+train_data_params:
+  name: "VAEMiraDataset"
+  video_dir: "./datasets/MiraData/miradata/vae_latents/"
+  csv_file: "./datasets/MiraData/miradata_filtered_long_videos_train.csv"
+  height: 480
+  width: 720
+  pad_to_fit: false
+  crop_to_fit: true
+  start_t: 3
+  end_t: -1
+  sample_fps: 10
+  random_sample: true
+  chunk_size: 49
+  max_num_chunks: 24 
+  random_flip: false
+  index: 
+    - 0
+    - -1
+
+num_validation_videos: 1
+dataloader_num_workers: 8 
+guidance_scale: 6.0
+inference_timesteps: 52
+max_num_chunks_wo_fifo: 1
+sampling_mode: ~
+sampling_params:
+  num_partitions: 4
+  lookahead_denoising: true
+  use_adaptive_padding: true
+
+val_data_params:
+  name: "MiraDataset"
+  video_dir: "./datasets/MiraData/miradata/clip_video"
+  csv_file: "./datasets/MiraData/miradata_v0_drop_val.csv"
+  height: 480
+  width: 720
+  pad_to_fit: false
+  crop_to_fit: true
+  random_flip: false
+  random_sample: false
+  start_t: 0
+  end_t: -1
+  sample_fps: 10
+  chunk_size: 49
+  max_num_chunks: 3 
+  index: 
+    - 11
+    - 12
+  
+

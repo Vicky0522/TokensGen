@@ -1,0 +1,146 @@
+# Pretrained diffusers model path.
+pretrained_model_name_or_path: "weights/CogVideoX-5b"
+name_prefix: gen
+# The folder where your training outputs will be placed.
+output_dir: "./outputs"
+
+seed: 42
+num_inference_steps: 52
+num_frames_per_chunk: 49
+guidance_scale: 6.0 
+dtype: 'bf16'
+
+# 2nd stage params
+use_2nd_stage: true
+seed_2nd: 42
+pretrained_2nd_stage_model_name_or_path:
+  "weights/TokensGen-T2To"
+longvgen_mean: 
+  "weights/TokensGen-To2V/mean.pt"
+longvgen_std:
+  "weights/TokensGen-To2V/std.pt"
+longvgen_pca:
+  "weights/TokensGen-To2V/pca.pt"
+
+sampling_mode: "fifo"
+sampling_params:
+  lookahead_denoising: true
+  use_adaptive_padding: true
+  use_sliding_window_embedding: false
+  num_partitions: 4
+
+use_vip: true
+pretrained_resampler_name_or_path:
+  "weights/TokensGen-To2V"
+video_ipadapter_params:
+  image_encoder_path: ""
+  scale: [1.0]
+  length: 480
+  use_vae_as_encoder: true
+  func_type: "1"
+  video_ipadapter_start_frame_idx: 1000
+  resampler_params:
+    dim: 3072
+    depth: 4
+    dim_head: 64
+    heads: 16
+    num_height_queries: 8 
+    num_width_queries: 12
+    num_temporal_queries: 4
+    embedding_dim: 3072
+    output_dim: 3072
+    ff_mult: 4
+    max_height_seq_len: 30
+    max_width_seq_len: 45
+    max_temporal_seq_len: 13
+
+# lora params
+use_lora: false
+lora_path: ""
+lora_params:
+  rank: 128
+  lora_alpha: 64
+  target_modules: ["to_k", "to_q", "to_v", "to_out.0"]
+
+cache_idx:
+  #- 67
+  #- 68
+  
+# data_params
+input_config:
+  public:
+    pad_to_fit: false
+    crop_to_fit: true
+    start_t: 0
+    end_t: -1
+    sample_fps: 10
+    output_fps: 10
+    output_res: [480, 720]
+    max_num_chunks_w_fifo: 25
+    max_num_chunks_wo_fifo: 1
+    num_videos_per_prompt: 1
+    
+  item1:
+    prompt: " A journey through a picturesque countryside on horseback. The rider, atop a well-groomed horse, traverses a variety of landscapes, including open fields, dirt paths lined with tall stone walls, and areas dense with lush trees. The setting is serene and bucolic, with the natural beauty of the environment highlighted by the soft, warm lighting of what appears to be either a sunrise or sunset. The atmosphere is tranquil, and the video captures the essence of a peaceful ride through rural scenery."
+    params:
+      max_num_chunks: 24
+  item2:
+    prompt: "A serene journey along a dirt road meandering through a lush forest. The road is flanked by a variety of trees and shrubbery, with the sun casting dynamic shadows across the path. As the video progresses, the perspective travels down the road, offering changing views of the forested landscape. The natural setting is vibrant with greenery and the sky is a clear blue with occasional fluffy white clouds, suggesting a peaceful, sunny day."
+    params:
+      max_num_chunks: 24
+  item3:
+    prompt: "A person riding a horse on a dirt path through a lush forest environment. The rider appears to be wearing a hat and a coat, suggesting a setting that could be from a historical or adventure context. The horse moves steadily along the path, surrounded by dense greenery, including tall trees and underbrush. As the journey progresses, the scenery opens up to reveal a stunning backdrop of majestic mountains, with the path leading the rider closer to a serene blue river. The lighting changes throughout the video, with the initial scenes bathed in soft daylight and later scenes capturing the golden hues of the sun low on the horizon, creating a warm, atmospheric glow that enhances the natural beauty of the landscape."
+    params:
+      max_num_chunks: 24
+  item4:
+    prompt: "A serene and natural landscape during twilight. It begins with a view of a dirt path meandering through a lush grassy area, flanked by trees and wildflowers. As the video progresses, the path leads the viewer towards a tranquil body of water visible in the distance. The lighting is soft and dim, suggesting either dawn or dusk, with the sky painted in muted blues and the first hints of warmer tones near the horizon."
+    params:
+      max_num_chunks: 24
+  item5:
+    prompt: "A lone rider guides a horse along a rustic dirt track that weaves through tranquil countryside. Dressed in understated, dark clothing, the rider maintains a calm, measured pace while passing beneath leafy trees and across stretches of emerald grass. The route unfolds in gentle stages—first a canopy‑shaded lane, then an open meadow shimmering with morning (or dusk) light, and at last a quiet expanse of water whose mirrored surface captures the day’s soft glow—together painting a serene pastoral journey."
+    params:
+      max_num_chunks: 24
+  item6:
+    prompt: "A serene and expansive beach on a cloudy day, with the overcast sky casting a cool, blue-toned hue over the scene. The shoreline is gently caressed by the lapping waves of the ocean, creating a rhythmic and calming presence. In the distance, a row of houses can be seen, adding a sense of habitation and life to the otherwise tranquil and natural landscape. The beach itself appears to be mostly deserted, emphasizing the quiet and peaceful atmosphere."
+    params:
+      max_num_chunks: 24
+  item7:
+    prompt: "A lone swordsman—seemingly a samurai—makes his way down an exquisitely crafted trail inside a video game world. He wears traditional Japanese garb: a midnight‑hued kimono traced with delicate motifs, a conical straw hat, and a katana resting at his hip. With each deliberate step, the landscape transforms: shadowed woodland ablaze in autumn reds and golds slips into a sunlit glade that opens onto a tranquil stretch of coast. His calm, purposeful stride speaks of a quest woven deep into the game’s narrative."
+    params:
+      max_num_chunks: 24
+  item8:
+    prompt: "The serene beauty of a river flowing through a rugged landscape at sunset. The river, filled with clear, rushing water, meanders through a terrain scattered with rocks and boulders. The surrounding mountains, bathed in the warm hues of the setting sun, create a majestic backdrop. The sky, painted with streaks of clouds, reflects a spectrum of colors from orange to blue, adding to the tranquil and picturesque setting."
+    params:
+      max_num_chunks: 24
+  item9:
+    prompt: "A man's journey down a foggy, tree-lined road. The man is dressed in a period-appropriate outfit, suggesting a setting from the past, with a white shirt, vest, and dark pants, complemented by a hat. His pace is steady and deliberate, as he traverses the uneven, muddy path. The fog adds a layer of mystery and serenity to the scene, with the sunlight struggling to pierce through the dense mist, creating a soft, diffused light that bathes the landscape."
+    params:
+      max_num_chunks: 24
+  item10:
+    prompt: "The exhilarating experience of a mountain biker navigating a rugged dirt trail in a dense forest. The trail is uneven and strewn with natural obstacles such as rocks, roots, and occasional puddles, reflecting the challenging conditions of a typical mountain biking path. The surrounding woods are lush with a variety of green foliage, indicating a healthy, vibrant forest ecosystem. As the biker progresses, the trail presents varying degrees of difficulty, including narrow passages flanked by trees and larger rocks that require careful maneuvering."
+    params:
+      max_num_chunks: 24
+  item11:
+    prompt: "The video depicts a sequence from a video game where the player is driving a red car along a winding rural highway at dawn. The environment is richly detailed, featuring rolling hills, distant farmhouses, and occasional wooden fences. The setting evokes a nostalgic mid-20th-century countryside. As the video progresses, the player navigates the car through different landscapes, including open fields bathed in golden sunlight and shaded forested sections with dappled light filtering through the trees."
+    params:
+      max_num_chunks: 24
+  item12:
+    prompt: "A serene maritime scene at dusk, with several small boats gently swaying on the calm surface of a body of water. The boats, moored by ropes, appear to be traditional, with a simple design and painted in shades of blue, creating a harmonious visual with the water. The backdrop features a rugged coastline, with rocks and landforms that suggest a natural harbor or cove. The lighting is soft and warm, indicative of the golden hour, which adds a tranquil and picturesque quality to the scene."
+    params:
+      max_num_chunks: 24
+  item13:
+    prompt: "A serene and picturesque snowy mountain path, flanked by dense evergreen trees and a clear blue sky. The ground is blanketed in a thick layer of pristine snow, which sparkles under the bright sunlight. As the video progresses, the viewer is taken on a tranquil journey along the path, which meanders through the rugged terrain, offering glimpses of the majestic mountain landscape. The natural beauty of the scene is accentuated by the contrast between the white snow, the dark green of the pine trees, and the rocky outcrops that occasionally jut out from the snow-covered slopes."
+    params:
+      max_num_chunks: 24
+  item14:
+    prompt: "The serene and atmospheric setting of a river meandering through a dense forest. The forest is lush with a variety of trees, some with thick canopies and others more sparse and skeletal. The ground is covered with grass and foliage, glistening with moisture, suggesting recent rain or morning dew. The sky is overcast, with fog hanging low, diffusing the light and creating a soft, ethereal glow that permeates the scene. As the video progresses, the perspective moves gently along the riverbank, revealing the tranquil flow of water and the rich textures of the environment."
+    params:
+      max_num_chunks: 24
+  item15:
+    prompt: "The serene beauty of cherry blossoms in full bloom, gently swaying in the foreground, with a tranquil lake stretching out towards a stately building in the background. The overcast sky casts a soft, diffused light, enhancing the delicate pink hues of the flowers. Throughout the video, the focus remains on the cherry blossoms, while the building and lake provide a constant, picturesque backdrop. The ambiance is peaceful, with the subtle movement of the branches suggesting a light breeze."
+    params:
+      max_num_chunks: 13
+  item16:
+    prompt: "A journey along a dirt road leading up to a hill with a panoramic view of a distant city. The progression of the frames shows the road winding through a natural landscape, with the cityscape gradually coming into clearer view as the camera moves forward. The sky is overcast, with a blanket of clouds diffusing the light, and the vegetation on either side of the road suggests a semi-arid region. As the video advances, the presence of human habitation becomes more apparent, with buildings and infrastructure like power lines entering the frame."
+    params:
+      max_num_chunks: 24
