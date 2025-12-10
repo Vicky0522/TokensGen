@@ -5,7 +5,6 @@ outputs
 run.sh
 __pycache__
 *_tmp
-*.mp4
 *.png
 *.egg-info/
 *.sh
