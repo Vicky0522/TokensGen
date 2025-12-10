@@ -26,13 +26,11 @@
 
 > The official repo for "TokensGen: Harnessing Condensed Tokens for Long Video Generation".
 
-
-https://github.com/user-attachments/assets/56279275-bcdf-460a-9e05-f9a589d7c020
-
+https://github.com/user-attachments/assets/df73be02-db0e-4ebf-bac5-fa921900c3ae
 
 ## 🔥 News
-* [2024-12-09] Our code and weights have been released
-* [2024-07-20] Our project page has been established
+* [2025-12-09] Our code and weights have been released
+* [2025-07-20] Our project page has been established
 * [2025-06-26] Our paper is accepted to ICCV 2025
 
 ## 🔧 TODO
